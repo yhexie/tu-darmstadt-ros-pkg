@@ -30,8 +30,11 @@ Location of of map origin on x axis of grid map (0.5 is directly in middle)
 Location of of map origin on y axis of grid map (0.5 is directly in middle)
 
 ~update_factor_free (double, default: 0.4)
+Update factor for updating portions of the grid map as free (0.5 means no update, 0.0 is max free update)
 
 ~update_factor_occupied (double, default: 0.9)
+Update factor for updating portions of the grid map as occupied (0.5 means no update, 1.0 is max occupied update)
+
 
 ~map_update_distance_thresh
 ~map_update_angle_thresh
