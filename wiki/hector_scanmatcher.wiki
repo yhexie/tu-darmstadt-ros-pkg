@@ -4,49 +4,58 @@
 
 = Parameters =
 
-~pub_drawings
-Publishes debug output via a Marker Array message (used scan endpoints, scan matching iterations pose estimates, match covariance approximation)
+~pub_drawings  (bool, default: false)
+Publish debug output via a Marker Array message (used scan endpoints, scan matching iterations pose estimates, match covariance approximation)
 
-~pub_debug_output
-Publishes
+~pub_debug_output (bool, default: false)
+Publishes debug output to topic "hector_debug_info".
+
+~pub_map_odom_transform (bool, default: true)
+Publish map -> odom transform as done by the gmapping package.
+
+~pub_odometry (bool, default: false)
+Publish odometry data for visualization
 
 
-pub_map_odom_transform
-pub_odometry
+~map_resolution (int, default: 0.05)
+Map resolution (grid cell edge length in meters)
 
+~map_size (int, default: 1024)
+Map size in grid cells (Map is square)
 
+~map_start_x (double, default: 0.5)
+Location of of map origin on x axis of grid map (0.5 is directly in middle)
 
-map_resolution
-map_size
-map_start_x
-map_start_y
+~map_start_y (double, default: 0.5)
+Location of of map origin on y axis of grid map (0.5 is directly in middle)
 
-update_factor_free
-update_factor_occupied
+~update_factor_free (double, default: 0.4)
 
-map_update_distance_thresh
-map_update_angle_thresh
+~update_factor_occupied (double, default: 0.9)
 
-scan_topic
-sys_msg_topic
-pose_update_topic
+~map_update_distance_thresh
+~map_update_angle_thresh
 
-use_tf_scan_transformation
-use_tf_pose_start_estimate
+~scan_topic
+~sys_msg_topic
+~pose_update_topic
 
-base_frame
-map_frame
-odom_frame
+~use_tf_scan_transformation
+~use_tf_pose_start_estimate
 
-output_timing
+~base_frame
+~map_frame
+~odom_frame
 
-transform_pub_period
-map_pub_period
+~output_timing
 
-laser_min_dist
-laser_max_dist
-laser_z_min_value
-laser_z_max_value
+~transform_pub_period
+~map_pub_period
+
+~laser_min_dist
+~laser_max_dist
+~laser_z_min_value
+~laser_z_max_value
 
 
 
