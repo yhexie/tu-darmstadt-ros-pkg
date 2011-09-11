@@ -1,4 +1,4 @@
-#summary API Documenation of the hector_mapping package
+#summary ROS API Documentation of the hector_mapping package
 
 # Hector Mapping
 
