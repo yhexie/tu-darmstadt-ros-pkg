@@ -38,7 +38,7 @@ Update factor for updating portions of the grid map as occupied (0.5 means no up
 ~map_update_distance_thresh (double, default: 0.4)
 Threshold for performing map updates [m]. The platform has to travel this far in meters or experience an angular change as described by the map_update_angle_thresh parameter since the last update before a map update happens.
 
-~map_update_angle_thresh
+~map_update_angle_thresh (double, default: 0.13)
 Threshold for performing map updates [rad]. The platform has to experience an angular change as described by this parameter of travel as far as specified by the map_update_distance_thresh parameter since the last update before a map update happens.
 
 ~scan_topic
