@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary API Documenation of the hector_mapping package
 
 # Hector Mapping
 
