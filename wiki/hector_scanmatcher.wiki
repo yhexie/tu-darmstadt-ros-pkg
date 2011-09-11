@@ -42,10 +42,17 @@ Threshold for performing map updates [m]. The platform has to travel this far in
 Threshold for performing map updates [rad]. The platform has to experience an angular change as described by this parameter of travel as far as specified by the map_update_distance_thresh parameter since the last update before a map update happens.
 
 ~scan_topic
+Topic name of the laser scanner topic to be used.
+
 ~sys_msg_topic
+Topic name of the system message.
+
 ~pose_update_topic
+Topic name of the pose updates provided by the system
 
 ~use_tf_scan_transformation
+
+
 ~use_tf_pose_start_estimate
 
 ~base_frame
