@@ -596,7 +596,7 @@ void PoseEstimation::getTransforms(std::vector<tf::StampedTransform>& transforms
   tf::Point position;
   getOrientation(orientation);
   getPosition(position);
-  btMatrix3x3 rotation(orientation);
+  btMatrix3x3 rotation(orientation.asBt());
   double y,p,r;
   rotation.getEulerYPR(y,p,r);
 
