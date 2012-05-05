@@ -82,6 +82,8 @@ bool PoseEstimationNode::init() {
   poseupdate_subscriber_ = getNodeHandle().subscribe("poseupdate", 10, &PoseEstimationNode::poseupdateCallback, this);
   syscommand_subscriber_ = getNodeHandle().subscribe("syscommand", 10, &PoseEstimationNode::syscommandCallback, this);
 
+  getPrivateNodeHandle().param("with_covariances", with_covariances_, false);
+
   // publish initial state
   publish();
 
@@ -172,7 +174,7 @@ void PoseEstimationNode::syscommandCallback(const std_msgs::StringConstPtr& sysc
 void PoseEstimationNode::publish() {
   if (state_publisher_) {
     nav_msgs::Odometry state;
-    pose_estimation_->getState(state, false);
+    pose_estimation_->getState(state, with_covariances_);
     state_publisher_.publish(state);
   }
 
@@ -194,6 +196,12 @@ void PoseEstimationNode::publish() {
     geometry_msgs::Vector3Stamped velocity_msg;
     pose_estimation_->getVelocity(velocity_msg);
     velocity_publisher_.publish(velocity_msg);
+  }
+
+  if (global_publisher_) {
+    sensor_msgs::NavSatFix global_msg;
+    pose_estimation_->getGlobalPosition(global_msg);
+    global_publisher_.publish(global_msg);
   }
 
   if (angular_velocity_bias_publisher_ || linear_acceleration_bias_publisher_) {

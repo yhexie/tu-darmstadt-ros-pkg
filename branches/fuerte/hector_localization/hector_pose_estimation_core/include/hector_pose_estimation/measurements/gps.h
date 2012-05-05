@@ -36,18 +36,20 @@ namespace hector_pose_estimation {
 
 class GPSModel : public MeasurementModel {
 public:
-  typedef ColumnVector MeasurementVector;
-  typedef SymmetricMatrix NoiseCovariance;
+  static const unsigned int MeasurementDimension = 4;
+  typedef ColumnVector_<MeasurementDimension> MeasurementVector;
+  typedef SymmetricMatrix_<MeasurementDimension> NoiseCovariance;
 
   GPSModel();
   virtual ~GPSModel();
 
+  virtual bool init();
   virtual SystemStatus getStatusFlags() const;
 
   virtual ColumnVector ExpectedValueGet() const;
   virtual Matrix dfGet(unsigned int i) const;
 
-private:
+protected:
   double position_stddev_;
   double velocity_stddev_;
 };
@@ -71,16 +73,7 @@ public:
   bool beforeUpdate(PoseEstimation &estimator, const GPSUpdate &update);
 
 private:
-  double reference_latitude_;
-  double reference_longitude_;
-  double reference_heading_;
-  bool has_reference_;
-
-  double radius_north_, radius_east_;
-  double cos_reference_heading_, sin_reference_heading_;
-
-  void updateReference();
-
+  GlobalReference *reference_;
   GPSUpdate last_;
   GPSModel::MeasurementVector y_;
 };

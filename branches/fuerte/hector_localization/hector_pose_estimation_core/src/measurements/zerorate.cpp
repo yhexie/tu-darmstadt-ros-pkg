@@ -31,12 +31,17 @@
 namespace hector_pose_estimation {
 
 ZeroRateModel::ZeroRateModel()
-  : MeasurementModel(1)
+  : MeasurementModel(MeasurementDimension)
 {
-  SymmetricMatrix noise(1);
   parameters().add("stddev", stddev_, 90.0*M_PI/180.0);
+}
+
+bool ZeroRateModel::init()
+{
+  NoiseCovariance noise = 0.0;
   noise(1,1) = pow(stddev_, 2);
   this->AdditiveNoiseSigmaSet(noise);
+  return true;
 }
 
 ZeroRateModel::~ZeroRateModel() {}
