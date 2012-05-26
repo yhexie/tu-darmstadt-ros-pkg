@@ -29,17 +29,18 @@
 #ifndef HECTOR_GAZEBO_PLUGINS_SENSOR_MODEL_H
 #define HECTOR_GAZEBO_PLUGINS_SENSOR_MODEL_H
 
-#include <gazebo/Param.hh>
+#include <gazebo.h>
+#include <gazebo/sdf/sdf.h>
 
 namespace gazebo {
 
 template <typename T>
 class SensorModel_ {
 public:
-  SensorModel_(std::vector<Param*> &parameters, const std::string& prefix = "");
+  SensorModel_();
   virtual ~SensorModel_();
 
-  virtual void Load(XMLConfigNode *node);
+  virtual void Load(sdf::ElementPtr _sdf, const std::string& prefix = std::string());
 
   virtual T operator()(const T& value) const { return value + current_error_; }
   virtual T operator()(const T& value, double dt) { return value + update(dt); }
@@ -59,57 +60,40 @@ public:
   T gaussian_noise;
 
 private:
-  ParamT<T> *offset_param_;
-  ParamT<T> *drift_param_;
-  ParamT<T> *drift_frequency_param_;
-  ParamT<T> *gaussian_noise_param_;
-
   static T Value(double value);
-
   T current_drift_;
   T current_error_;
 };
 
 template <typename T>
-SensorModel_<T>::SensorModel_(std::vector<Param*> &parameters, const std::string &prefix)
+SensorModel_<T>::SensorModel_()
+  : offset(Value(0.0))
+  , drift(Value(0.0))
+  , drift_frequency(Value(1.0/3600.0))
+  , gaussian_noise(Value(0.0))
 {
-  Param::Begin(&parameters);
-  if (prefix.empty()) {
-    offset_param_          = new ParamT<T>("offset", Value(0.0), 0);
-    drift_param_           = new ParamT<T>("drift", Value(0.0), 0);
-    drift_frequency_param_ = new ParamT<T>("driftFrequency", Value(1.0/3600.0), 0);
-    gaussian_noise_param_  = new ParamT<T>("gaussianNoise", Value(0.0), 0);
-  } else {
-    offset_param_          = new ParamT<T>(prefix + "Offset", Value(0.0), 0);
-    drift_param_           = new ParamT<T>(prefix + "Drift", Value(0.0), 0);
-    drift_frequency_param_ = new ParamT<T>(prefix + "DriftFrequency", Value(1.0/3600.0), 0);
-    gaussian_noise_param_  = new ParamT<T>(prefix + "GaussianNoise", Value(0.0), 0);
-  }
-  Param::End();
-
   reset();
 }
 
 template <typename T>
 SensorModel_<T>::~SensorModel_()
 {
-  delete offset_param_;
-  delete drift_param_;
-  delete drift_frequency_param_;
-  delete gaussian_noise_param_;
 }
 
 template <typename T>
-void SensorModel_<T>::Load(XMLConfigNode *node)
+void SensorModel_<T>::Load(sdf::ElementPtr _sdf, const std::string& prefix)
 {
-  offset_param_->Load(node);
-  offset = offset_param_->GetValue();
-  drift_param_->Load(node);
-  drift = drift_param_->GetValue();
-  drift_frequency_param_->Load(node);
-  drift_frequency = drift_frequency_param_->GetValue();
-  gaussian_noise_param_->Load(node);
-  gaussian_noise = gaussian_noise_param_->GetValue();
+  if (prefix.empty()) {
+    if (_sdf->HasElement("offset"))         offset = _sdf->GetValueDouble("offset");
+    if (_sdf->HasElement("drift"))          drift = _sdf->GetValueDouble("drift");
+    if (_sdf->HasElement("driftFrequency")) drift_frequency = _sdf->GetValueDouble("driftFrequency");
+    if (_sdf->HasElement("gaussianNoise"))  gaussian_noise = _sdf->GetValueDouble("gaussianNoise");
+  } else {
+    if (_sdf->HasElement(prefix + "Offset"))         offset = _sdf->GetValueDouble(prefix + "Offset");
+    if (_sdf->HasElement(prefix + "Drift"))          drift = _sdf->GetValueDouble(prefix + "Drift");
+    if (_sdf->HasElement(prefix + "DriftFrequency")) drift_frequency = _sdf->GetValueDouble(prefix + "DriftFrequency");
+    if (_sdf->HasElement(prefix + "GaussianNoise"))  gaussian_noise = _sdf->GetValueDouble(prefix + "GaussianNoise");
+  }
 }
 
 namespace {
@@ -148,7 +132,7 @@ double SensorModel_<double>::update(double dt)
 }
 
 template <>
-Vector3 SensorModel_<Vector3>::update(double dt)
+math::Vector3 SensorModel_<math::Vector3>::update(double dt)
 {
   current_error_.x = SensorModelInternalUpdate(current_drift_.x, drift.x, drift_frequency.x, offset.x, gaussian_noise.x, dt);
   current_error_.y = SensorModelInternalUpdate(current_drift_.y, drift.y, drift_frequency.y, offset.y, gaussian_noise.y, dt);
@@ -164,10 +148,10 @@ void SensorModel_<T>::reset(const T& value)
 }
 
 template <typename T> T SensorModel_<T>::Value(double value) { return T(value); }
-template <> Vector3 SensorModel_<Vector3>::Value(double value) { return Vector3(value, value, value); }
+template <> math::Vector3 SensorModel_<math::Vector3>::Value(double value) { return math::Vector3(value, value, value); }
 
 typedef SensorModel_<double> SensorModel;
-typedef SensorModel_<Vector3> SensorModel3;
+typedef SensorModel_<math::Vector3> SensorModel3;
 
 }
 
