@@ -29,12 +29,8 @@
 #ifndef HECTOR_GAZEBO_PLUGINS_GAZEBO_ROS_BARO_H
 #define HECTOR_GAZEBO_PLUGINS_GAZEBO_ROS_BARO_H
 
-#include <gazebo/Controller.hh>
-#include <gazebo/Entity.hh>
-#include <gazebo/Model.hh>
-#include <gazebo/Body.hh>
-#include <gazebo/Param.hh>
-#include <gazebo/Time.hh>
+#include "gazebo.h"
+#include "common/Plugin.hh"
 
 #include <ros/ros.h>
 #ifdef USE_MAV_MSGS
@@ -47,21 +43,23 @@
 namespace gazebo
 {
 
-class GazeboRosBaro : public Controller
+class GazeboRosBaro : public ModelPlugin
 {
 public:
-  GazeboRosBaro(Entity *parent);
+  GazeboRosBaro();
   virtual ~GazeboRosBaro();
 
 protected:
-  virtual void LoadChild(XMLConfigNode *node);
-  virtual void InitChild();
-  virtual void UpdateChild();
-  virtual void FiniChild();
+  virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf);
+  virtual void Reset();
+  virtual void Update();
 
 private:
-  Model *parent_;
-  Body *body_;
+  /// \brief The parent World
+  physics::WorldPtr world;
+
+  /// \brief The link referred to by this plugin
+  physics::LinkPtr link;
 
   ros::NodeHandle* node_handle_;
   ros::Publisher publisher_;
@@ -72,15 +70,22 @@ private:
   geometry_msgs::PointStamped height_;
 #endif
 
-  ParamT<std::string> *body_name_;
-  ParamT<std::string> *namespace_;
-  ParamT<std::string> *frame_id_;
-  ParamT<std::string> *topic_;
+  std::string namespace_;
+  std::string topic_;
+  std::string link_name_;
+  std::string frame_id_;
 
-  ParamT<double> *elevation_;
-  ParamT<double> *qnh_;
+  double elevation_;
+  double qnh_;
 
   SensorModel sensor_model_;
+
+  /// \brief save last_time
+  common::Time last_time;
+  common::Time update_period;
+
+  // Pointer to the update event connection
+  event::ConnectionPtr updateConnection;
 };
 
 } // namespace gazebo
