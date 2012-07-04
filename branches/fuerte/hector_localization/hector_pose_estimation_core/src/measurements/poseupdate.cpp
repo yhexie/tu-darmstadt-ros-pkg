@@ -233,9 +233,9 @@ double PoseUpdate::updateInternal(const SymmetricMatrix &Px, const ColumnVector 
   if (innovation > 0.0) {
     S_1 = (Ii.inverse() + H_Px_HT).inverse();
   } else if (innovation <= 0.0) {
-    // S_1 = 0.0;
-    ROS_DEBUG_STREAM("Ignoring useless poseupdate for " << text << " with information [" << Iy << "]");
-    return innovation;
+    S_1 = 0.0;
+    // ROS_DEBUG_STREAM("Ignoring useless poseupdate for " << text << " with information [" << Iy << "]");
+    // return innovation;
   }
 
   Pxy = Px - Px  * HT * S_1 * H * Px; // may invalidate Px if &Pxy == &Px
