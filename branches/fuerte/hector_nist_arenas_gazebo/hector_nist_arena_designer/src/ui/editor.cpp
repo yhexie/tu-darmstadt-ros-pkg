@@ -40,24 +40,19 @@ Editor::Editor(QWidget *parent)
     else
     {
         qDebug() << "[Rescue Arena Designer] Using rospack to find hector_arena_gui and hector_arena_elements packages.";
-        m_hector_arena_gui_package_dir = findRosPackage("hector_nist_arena_designer");
+        m_hector_arena_gui_package_dir = findRosPackage("hector_arena_gui");
         // findRosPackage() pops up an error message if necessary
         if (m_hector_arena_gui_package_dir.isEmpty())
             qApp->quit();
-
-        m_hector_arena_elements_package_dir = findRosPackage("hector_nist_arena_elements");
+        m_hector_arena_elements_package_dir = findRosPackage("hector_arena_elements");
         if (m_hector_arena_elements_package_dir.isEmpty())
-            qApp->quit();
-
-        m_hector_arena_worlds_package_dir = findRosPackage("hector_nist_arena_worlds");
-        if (m_hector_arena_worlds_package_dir.isEmpty())
             qApp->quit();
     }
 
     QString arenaElementDir = m_hector_arena_elements_package_dir + "/elements";
 
-    m_openSaveDir = m_hector_arena_worlds_package_dir + "/arenas";
-    m_exportDir = m_hector_arena_worlds_package_dir + "/worlds";
+    m_openSaveDir = m_hector_arena_elements_package_dir + "/arenas";
+    m_exportDir = m_hector_arena_elements_package_dir + "/worlds";
 
     m_typeRegistry = new ArenaElementTypeRegistry(arenaElementDir);
     m_arena = new Arena(m_typeRegistry);
@@ -79,7 +74,6 @@ Editor::Editor(QWidget *parent)
 
     qDebug() << "[Rescue Arena Designer] hector_arena_gui = " << m_hector_arena_gui_package_dir;
     qDebug() << "[Rescue Arena Designer] hector_arena_elements = " << m_hector_arena_elements_package_dir;
-    qDebug() << "[Rescue Arena Designer] hector_arena_worlds = " << m_hector_arena_worlds_package_dir;
 
     loadConfig(m_hector_arena_gui_package_dir + "/config.xml");
 
@@ -110,6 +104,9 @@ Editor::Editor(QWidget *parent)
 
     connect(m_ui->actionExport, SIGNAL(triggered()),
             this, SLOT(slotExport()));
+
+    connect(m_ui->actionExportSdf, SIGNAL(triggered()),
+            this, SLOT(slotExportSdf()));
 
     connect(m_ui->actionShowDocumentation, SIGNAL(triggered()),
             this, SLOT(slotShowDocumentation()));
@@ -449,6 +446,16 @@ void Editor::slotExport()
     if (!target.isEmpty())
     {
         m_arena->saveWorld(target);
+        m_exportDir = QFileInfo(target).path();
+    }
+}
+
+void Editor::slotExportSdf()
+{
+    QString target = QFileDialog::getSaveFileName(this, "Select file to export arena to", m_exportDir, "Gazebo .world File (*.world)");
+    if (!target.isEmpty())
+    {
+        m_arena->saveWorldSdf(target);
         m_exportDir = QFileInfo(target).path();
     }
 }
