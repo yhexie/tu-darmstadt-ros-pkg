@@ -1,5 +1,5 @@
 //=================================================================================================
-// Copyright (c) 2011, Johannes Meyer and Martin Nowara, TU Darmstadt
+// Copyright (c) 2011, Johannes Meyer, TU Darmstadt
 // All rights reserved.
 
 // Redistribution and use in source and binary forms, with or without
@@ -26,51 +26,34 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //=================================================================================================
 
-#ifndef HECTOR_POSE_ESTIMATION_GENERIC_QUATERNION_SYSTEM_MODEL_H
-#define HECTOR_POSE_ESTIMATION_GENERIC_QUATERNION_SYSTEM_MODEL_H
+#ifndef HECTOR_POSE_ESTIMATION_RATE_H
+#define HECTOR_POSE_ESTIMATION_RATE_H
 
-#include <hector_pose_estimation/system_model.h>
+#include <hector_pose_estimation/measurement.h>
+#include <bfl/wrappers/matrix/matrix_wrapper.h>
 
 namespace hector_pose_estimation {
 
-class GenericQuaternionSystemModel : public SystemModel
-{
+class RateModel : public MeasurementModel {
 public:
-  GenericQuaternionSystemModel();
-  virtual ~GenericQuaternionSystemModel();
+  static const unsigned int MeasurementDimension = 3;
+  typedef ColumnVector_<MeasurementDimension> MeasurementVector;
+  typedef SymmetricMatrix_<MeasurementDimension> NoiseCovariance;
 
-  virtual std::string getName() const { return "GenericQuaternionSystemModel"; }
+  RateModel();
+  virtual ~RateModel();
+
   virtual bool init();
 
-  virtual SystemStatus getStatusFlags() const;
-
-  virtual ColumnVector ExpectedValueGet(double dt) const;
-  virtual SymmetricMatrix CovarianceGet(double dt) const;
-  virtual Matrix dfGet(unsigned int i, double dt) const;
-
-  virtual void Limit(StateVector& x) const;
-
-  void setGravity(double gravity) { gravity_ = gravity; }
-  double getGravity() const { return gravity_; }
+  virtual ColumnVector ExpectedValueGet() const;
+  virtual Matrix dfGet(unsigned int i) const;
 
 protected:
-  static void normalize(StateVector& x);
-
-protected:
-  double gravity_;
-  double rate_stddev_;
-#ifdef USE_RATE_SYSTEM_MODEL
-  double angular_acceleration_stddev_;
-#endif // USE_RATE_SYSTEM_MODEL
-  double acceleration_stddev_;
-  double velocity_stddev_;
-  double acceleration_drift_;
-  double rate_drift_;
-
-  mutable double q0,q1,q2,q3;
-  mutable SymmetricMatrix_<StateDimension> noise_;
+  double stddev_;
 };
+
+typedef Measurement_<RateModel> Rate;
 
 } // namespace hector_pose_estimation
 
-#endif // HECTOR_POSE_ESTIMATION_GENERIC_QUATERNION_SYSTEM_MODEL_H
+#endif // HECTOR_POSE_ESTIMATION_RATE_H
