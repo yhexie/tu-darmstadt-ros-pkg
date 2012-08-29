@@ -5,4 +5,3 @@
         <arg name="robot_model" value="biorob_ultra_x5/biorob_ultra_x5.urdf.xacro"/>
       </include>
 </launch>
-
