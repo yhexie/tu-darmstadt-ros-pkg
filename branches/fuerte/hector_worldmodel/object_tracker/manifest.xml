@@ -18,6 +18,8 @@
   <depend package="hector_nav_msgs" />
   <depend package="hector_marker_drawing" />
 
+  <rosdep name="eigen" />
+
 </package>
 
 

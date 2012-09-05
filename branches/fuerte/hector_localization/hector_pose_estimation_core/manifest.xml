@@ -17,6 +17,8 @@
   <depend package="nav_msgs" />
   <depend package="tf" />
 
+  <rosdep name="eigen" />
+
   <export>
     <rosbuild cmake_directory="${prefix}/cmake" />
     <cpp cflags="`pkg-config --cflags eigen3` -I${prefix}/include" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lhector_pose_estimation" />
