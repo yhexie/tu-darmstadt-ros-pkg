@@ -4,13 +4,9 @@
     xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
     xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
     xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface">
-
-    <!-- Included URDF Files -->
-    <!--<include filename="$(find erratic_description)/urdf/materials.urdf.xacro" />-->
-      <!--<include filename="$(find monstertruck_urdf)/hector/materials.urdf.xacro" />-->
-    <!--<include filename="$(find erratic_description)/urdf/erratic_computer.xacro" />-->
+    
     <include filename="$(find hlugv_description)/urdf/hlugv_wheel.urdf.xacro" />
-
+    
     <!-- Properties (Constants) -->
     <property name="M_PI" value="3.14159"/>
     
@@ -23,7 +19,7 @@
     <property name="wheel_size_y" value="0.05" />
     
     <property name="total_width" value="0.297" />
-<!--    <property name="wheel_offset_y" value="${(total_width - wheel_size_y) / 2}" />-->
+    <!--    <property name="wheel_offset_y" value="${(total_width - wheel_size_y) / 2}" />-->
     <property name="wheel_offset_y" value="0.12350" />
     <property name="wheel_offset_z_from_base_link" value="-0.029500" />
     
@@ -33,14 +29,14 @@
     <property name="top_size_y" value="0.3556" />
     <property name="top_size_z" value="0.0020" />
     
-
+    
     <property name="caster_wheel_offset_y" value="0.17" />
     
     <property name="caster_support_x" value="0.086" />
     <property name="caster_support_z" value="0.1095" />
-
-
-
+    
+    
+    
     <macro name="hlugv">
         <!-- base_footprint is a fictitious link(frame) that is on the ground right below base_link origin,
              navigation stack depends on this frame -->
@@ -52,33 +48,32 @@
                          iyy="0.0001" iyz="0.0" 
                          izz="0.0001" />
             </inertial>
-
+            
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
                     <box size="0.001 0.001 0.001" />
                 </geometry>
                 <material name="Green" >
-		        <color rgba="0 0.8 0 1"/>
+                    <color rgba="0 0.8 0 1"/>
                 </material>
             </visual>
-
-<!--            <collision>
+            
+            <!--            <collision>
                 <origin xyz="0 0 ${base_size_z/2 + ground_clearance}" rpy="0 0 0" />
                 <geometry>
                   <box size="0.001 0.001 0.001" />
                 </geometry>
             </collision>-->
         </link>
-
+        
         <joint name="base_footprint_joint" type="fixed">
-            <!-- NB: While you would think this would make it go up, it is oddly reversed.
-                 This moves the joint to 0,0,0 where we want it for rviz, etc. -->
-            <origin xyz="0 0 ${base_size_z/2 + 0.051}" rpy="0 0 0" />        
+            <origin xyz="0 0 ${base_size_z/2 + 0.051}" rpy="0 0 0" />
+             
             <parent link="base_footprint"/>
             <child link="base_link" />
         </joint>
-
+        
         <!-- Links and Joints (i.e., the robot) -->
         <link name="base_link">
             <inertial>
@@ -93,11 +88,11 @@
                 <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
                 <geometry>
                     <box size="${base_size_x} ${base_size_y} ${base_size_z}" />
-	      </geometry>
-              <material name="Grey" >
-		        <color rgba="0.8 0.8 0.8 1"/>
+                </geometry>
+                <material name="Grey" >
+                    <color rgba="0.8 0.8 0.8 1"/>
                 </material>
-
+                
             </visual>
             
             <collision>
@@ -107,20 +102,19 @@
                 </geometry>
             </collision>
         </link>
-
-
-<!--	<hlugv_wheel suffix="left" parent="base_link" reflect="1"/>
-        <hlugv_wheel suffix="right" parent="base_link" reflect="-1"/>-->
-	<hlugv_wheel parent="base_link" prefix="front_left" offset_x= "0.15" offset_y = "${wheel_offset_y}" offset_z = "${wheel_offset_z_from_base_link}" reflect="1" />
-	<hlugv_wheel parent="base_link" prefix="mid_left" offset_x= "0.0" offset_y = "${wheel_offset_y}" offset_z = "${wheel_offset_z_from_base_link}" reflect="1" />
-	<hlugv_wheel parent="base_link" prefix="rear_left" offset_x= "-0.15" offset_y = "${wheel_offset_y}" offset_z = "${wheel_offset_z_from_base_link}" reflect="1" />
+        
+        
+        <!--	Add wheels using the hlugv_wheel macro -->
+        <hlugv_wheel parent="base_link" prefix="front_left" offset_x= "0.15" offset_y = "${wheel_offset_y}" offset_z = "${wheel_offset_z_from_base_link}" reflect="1" />
+        <hlugv_wheel parent="base_link" prefix="mid_left" offset_x= "0.0" offset_y = "${wheel_offset_y}" offset_z = "${wheel_offset_z_from_base_link}" reflect="1" />
+        <hlugv_wheel parent="base_link" prefix="rear_left" offset_x= "-0.15" offset_y = "${wheel_offset_y}" offset_z = "${wheel_offset_z_from_base_link}" reflect="1" />
         <hlugv_wheel parent="base_link" prefix="front_right" offset_x= "0.15" offset_y = "-${wheel_offset_y}" offset_z = "${wheel_offset_z_from_base_link}" reflect="1" />
-	<hlugv_wheel parent="base_link" prefix="mid_right" offset_x= "0.0" offset_y = "-${wheel_offset_y}" offset_z = "${wheel_offset_z_from_base_link}" reflect="1" />
-	<hlugv_wheel parent="base_link" prefix="rear_right" offset_x= "-0.15" offset_y = "-${wheel_offset_y}" offset_z = "${wheel_offset_z_from_base_link}" reflect="1" />
-
+        <hlugv_wheel parent="base_link" prefix="mid_right" offset_x= "0.0" offset_y = "-${wheel_offset_y}" offset_z = "${wheel_offset_z_from_base_link}" reflect="1" />
+        <hlugv_wheel parent="base_link" prefix="rear_right" offset_x= "-0.15" offset_y = "-${wheel_offset_y}" offset_z = "${wheel_offset_z_from_base_link}" reflect="1" />
+        
         <gazebo>
-	  
-	    <controller:diffdrive_plugin_6w name="differential_drive_controller" plugin="libdiffdrive_plugin_6w.so">
+            
+            <controller:diffdrive_plugin_6w name="differential_drive_controller" plugin="libdiffdrive_plugin_6w.so">
                 <alwaysOn>true</alwaysOn>
                 <update>100</update>
                 <updateRate>100.0</updateRate>
@@ -130,80 +124,23 @@
                 <midRightJoint>mid_right_wheel_joint</midRightJoint>
                 <rearLeftJoint>rear_left_wheel_joint</rearLeftJoint>
                 <rearRightJoint>rear_right_wheel_joint</rearRightJoint>
-               <wheelSeparation>${wheel_offset_y*2}</wheelSeparation>
-                <wheelDiameter>${wheel_radius*2}</wheelDiameter>
-                <torque>5</torque>
-                <interface:position name="position_iface_2"/>
-                <robotNamespace>/</robotNamespace>
-                <topicName>cmd_vel</topicName>
-            </controller:diffdrive_plugin_6w>
-	  
-<!--            <controller:diffdrive_plugin_6w name="differential_drive_controller_1" plugin="libdiffdrive_plugin_6w.so">
-                <alwaysOn>true</alwaysOn>
-                <update>100</update>
-                <updateRate>100.0</updateRate>
-                <leftJoint>mid_right_wheel_joint</leftJoint>
-                <rightJoint>mid_left_wheel_joint</rightJoint>
-                <wheelSeparation>${wheel_offset_y*2}</wheelSeparation>
-                <wheelDiameter>${wheel_radius*2}</wheelDiameter>
-                <torque>5</torque>
-                <interface:position name="position_iface_0"/>
-                <robotNamespace>/</robotNamespace>
-                <topicName>cmd_vel</topicName>
-            </controller:diffdrive_plugin_6w>
-	    
-	    <controller:diffdrive_plugin_6w name="differential_drive_controller_2" plugin="libdiffdrive_plugin_6w.so">
-                <alwaysOn>true</alwaysOn>
-                <update>100</update>
-                <updateRate>100.0</updateRate>
-                <leftJoint>front_right_wheel_joint</leftJoint>
-                <rightJoint>front_left_wheel_joint</rightJoint>
-                <wheelSeparation>${wheel_offset_y*2}</wheelSeparation>
-                <wheelDiameter>${wheel_radius*2}</wheelDiameter>
-                <torque>5</torque>
-                <interface:position name="position_iface_1"/>
-                <robotNamespace>/</robotNamespace>
-                <topicName>cmd_vel</topicName>
-            </controller:diffdrive_plugin_6w>
-	    
-	    <controller:diffdrive_plugin_6w name="differential_drive_controller_3" plugin="libdiffdrive_plugin_6w.so">
-                <alwaysOn>true</alwaysOn>
-                <update>100</update>
-                <updateRate>100.0</updateRate>
-                <leftJoint>rear_right_wheel_joint</leftJoint>
-                <rightJoint>rear_left_wheel_joint</rightJoint>
                 <wheelSeparation>${wheel_offset_y*2}</wheelSeparation>
                 <wheelDiameter>${wheel_radius*2}</wheelDiameter>
                 <torque>5</torque>
                 <interface:position name="position_iface_2"/>
                 <robotNamespace>/</robotNamespace>
                 <topicName>cmd_vel</topicName>
-            </controller:diffdrive_plugin_6w>-->
-
-<!--            <controller:gazebo_ros_p3d name="p3d_base_controller" plugin="libgazebo_ros_p3d.so">
-                <alwaysOn>true</alwaysOn>
-                <updateRate>100.0</updateRate>
-                <bodyName>base_link</bodyName>
-                <topicName>base_pose_ground_truth</topicName>
-                <gaussianNoise>0.01</gaussianNoise>
-                <frameName>map</frameName>
-                <xyzOffsets>0 0 0</xyzOffsets> 
-                <rpyOffsets>0 0 0</rpyOffsets>
-                <interface:position name="p3d_base_position"/>
-            </controller:gazebo_ros_p3d>-->
-
+            </controller:diffdrive_plugin_6w>
+            
             <canonicalBody>base_footprint</canonicalBody>
-
-            <!-- this publishes empty joint_states due to no transmission, but
-             triggering robot_state_publisher to publish tf between fixed joints in erratic,
-             (e.g. base_laser_link for the base_scan frame) -->
+            
             <controller:gazebo_ros_controller_manager name="gazebo_ros_controller_manager" plugin="libgazebo_ros_controller_manager.so">
                 <alwaysOn>true</alwaysOn>
                 <updateRate>100.0</updateRate>
                 <interface:audio name="gazebo_ros_controller_manager_dummy_iface" />
             </controller:gazebo_ros_controller_manager>
-	    
-	    <controller:gazebo_ros_imu name="imu_controller" plugin="libgazebo_ros_imu.so">
+            
+            <controller:gazebo_ros_imu name="imu_controller" plugin="libgazebo_ros_imu.so">
                 <alwaysOn>true</alwaysOn>
                 <updateRate>50</updateRate>
                 <bodyName>base_link</bodyName>
@@ -213,17 +150,17 @@
                 <rpyOffsets>0 0 0</rpyOffsets>
                 <interface:position name="imu_position"/>
             </controller:gazebo_ros_imu>
+            
+        </gazebo>
         
+        <gazebo reference="base_link">
+            <material>HLUGV/Green</material>
         </gazebo>
-	
-	<gazebo reference="base_link">
-           <material>HLUGV/Green</material>
+        
+        <gazebo reference="base_link">
+            <material>HLUGV/Green</material>
         </gazebo>
-	
-	<gazebo reference="base_link">
-           <material>HLUGV/Green</material>
-        </gazebo>
-
-
+        
+        
     </macro>
 </robot>
