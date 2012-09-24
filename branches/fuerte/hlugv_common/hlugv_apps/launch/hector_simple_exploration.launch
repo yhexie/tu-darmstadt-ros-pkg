@@ -7,6 +7,6 @@
   
   <!-- This starts the simple_exploration_controller node that calls the above mentioned service and generates geometry_msgs/Twist commands
     on the 'cmd_vel' topic so the robot follows the exploration plan -->
-  <node pkg="hector_exploration_controller" type="simple_exploration_controller" name="simple_exploration_controller" output="screen">  
+  <node pkg="hector_exploration_controller" type="simple_exploration_controller" name="simple_exploration_controller" output="screen"/>  
   
 </launch>
