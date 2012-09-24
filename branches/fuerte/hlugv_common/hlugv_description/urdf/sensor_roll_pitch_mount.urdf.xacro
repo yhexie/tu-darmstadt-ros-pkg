@@ -159,7 +159,7 @@ xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
         </gazebo>
         
         
-        <xacro:hokuyo_utm30lx name="laser1" parent="${prefix}_pitched_link" ros_topic="laser1/scan" update_rate="40" ray_count="1081" min_angle="135" max_angle="-135">
+        <xacro:hokuyo_utm30lx name="laser1" parent="${prefix}_pitched_link" ros_topic="scan" update_rate="40" ray_count="1081" min_angle="135" max_angle="-135">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </xacro:hokuyo_utm30lx>
         

@@ -11,9 +11,9 @@
     
     <!-- Add arm -->  
     <include filename="$(find hector_lc_arm_description)/urdf/hector_lc_arm_ax12_5dof.urdf.xacro" />
-    <hector_lc_arm parent="base_link" >
+<!--    <hector_lc_arm parent="base_link" >
         <origin xyz="0.13 -0.04 0.04" rpy="0 0 0"/>
-    </hector_lc_arm>
+    </hector_lc_arm>-->
     
     <!-- Add roll/pitch mount -->
     <include filename="$(find hlugv_description)/urdf/sensor_roll_pitch_mount.urdf.xacro" />
