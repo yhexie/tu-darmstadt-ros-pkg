@@ -23,7 +23,7 @@ endif()
 # Get the include dirs
 rosbuild_invoke_rospack(${package} ${package} INCLUDE_DIRS cflags-only-I)
 #message("${package} include dirs: ${${package}_INCLUDE_DIRS}")
-include_directories(${${package}_INCLUDE_DIRS})
+include_directories(${${package}_PACKAGE_PATH}/msg_gen/cpp/include ${${package}_INCLUDE_DIRS})
 
 # Get the other cflags
 #rosbuild_invoke_rospack(${package} ${package} temp cflags-only-other)
@@ -66,10 +66,11 @@ foreach(message ${MSG_FILES})
   execute_process(COMMAND ${ROSCPP_INTROSPECTION_PACKAGE_PATH}/scripts/get_fields.pl ${${package}_PACKAGE_PATH}/msg/${message}.msg --declaration OUTPUT_VARIABLE DECLARE_FIELDS)
   execute_process(COMMAND ${ROSCPP_INTROSPECTION_PACKAGE_PATH}/scripts/get_fields.pl ${${package}_PACKAGE_PATH}/msg/${message}.msg --constructor OUTPUT_VARIABLE ADD_FIELDS)
 
-  set(header "${${package}_PACKAGE_PATH}/msg_gen/cpp/include/${package}/${message}.h")
-  if(NOT EXISTS "${header}")
-    message(SEND_ERROR "Could not find cpp header ${package}/${message}.h. Please make sure that package ${pkg} is built or include it in your manifest.")
-  endif(NOT EXISTS "${header}")
+#  set(header "${${package}_PACKAGE_PATH}/msg_gen/cpp/include/${package}/${message}.h")
+#  if(NOT EXISTS "${header}")
+#    message(SEND_ERROR "Could not find cpp header ${package}/${message}.h. Please make sure that package ${pkg} is built or include it in your manifest.")
+#  endif(NOT EXISTS "${header}")
+  set(header "${package}/${message}.h")
 
   configure_file(introspect_message.cpp.in "${CMAKE_CURRENT_BINARY_DIR}/introspect_${message}.cpp" @ONLY)
   list(APPEND SOURCES "${CMAKE_CURRENT_BINARY_DIR}/introspect_${message}.cpp")
