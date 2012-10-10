@@ -136,6 +136,7 @@ public:
   virtual void getBias(geometry_msgs::Vector3& angular_velocity, geometry_msgs::Vector3& linear_acceleration);
   virtual void getBias(geometry_msgs::Vector3Stamped& angular_velocity, geometry_msgs::Vector3Stamped& linear_acceleration);
   virtual void getTransforms(std::vector<tf::StampedTransform>& transforms);
+  virtual void updateWorldToOtherTransform(tf::StampedTransform& world_to_other_transform);
 
   virtual ParameterList getParameters() const;
 
@@ -167,10 +168,12 @@ private:
   GlobalReference global_reference_;
 
   ros::Time timestamp_;
+  std::string world_frame_;
   std::string nav_frame_;
   std::string base_frame_;
   std::string stabilized_frame_;
   std::string footprint_frame_;
+  std::string position_frame_;
 
   ros::Time alignment_start_;
   double alignment_time_;
