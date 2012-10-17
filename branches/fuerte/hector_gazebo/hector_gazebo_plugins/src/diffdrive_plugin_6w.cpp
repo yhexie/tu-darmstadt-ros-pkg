@@ -95,7 +95,7 @@ void DiffDrivePlugin6W::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   }
   else {
     linkName = _sdf->GetElement("bodyName")->GetValueString();
-    link = boost::shared_dynamic_cast<physics::Link>(world->GetEntity(_sdf->GetElement("bodyName")->GetValueString()));
+    link = _model->GetLink(linkName);
   }
 
   // assert that the body by linkName exists
