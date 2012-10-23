@@ -41,6 +41,9 @@
     local-name: hector_worldmodel
     uri: https://tu-darmstadt-ros-pkg.googlecode.com/svn/trunk/hector_worldmodel
 - svn: 
+    local-name: hlugv_common
+    uri: https://tu-darmstadt-ros-pkg.googlecode.com/svn/trunk/hlugv_common
+- svn: 
     local-name: vrmagic_camera
     uri: https://tu-darmstadt-ros-pkg.googlecode.com/svn/trunk/vrmagic_camera
 - git:
