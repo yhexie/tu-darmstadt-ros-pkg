@@ -97,8 +97,8 @@ GazeboQuadrotorAerodynamics::~GazeboQuadrotorAerodynamics()
 // Load the controller
 void GazeboQuadrotorAerodynamics::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 {
-  model = _model;
   world = _model->GetWorld();
+  link = _model->GetLink();
 
   // load parameters
   if (!_sdf->HasElement("robotNamespace"))
@@ -294,8 +294,8 @@ void GazeboQuadrotorAerodynamics::Update()
   }
 
   // fill input vector u for propulsion model
-  velocity = model->GetRelativeLinearVel();
-  rate = model->GetRelativeAngularVel();
+  velocity = link->GetRelativeLinearVel();
+  rate = link->GetRelativeAngularVel();
   propulsion_model_->u[0] = velocity.x;
   propulsion_model_->u[1] = -velocity.y;
   propulsion_model_->u[2] = -velocity.z;
@@ -377,8 +377,8 @@ void GazeboQuadrotorAerodynamics::Update()
   }
 
   // set force and torque in gazebo
-  model->GetLink()->AddRelativeForce(force);
-  model->GetLink()->AddRelativeTorque(torque);
+  link->AddRelativeForce(force);
+  link->AddRelativeTorque(torque - link->GetInertial()->GetCoG().GetCrossProd(force));
 }
 
 ////////////////////////////////////////////////////////////////////////////////

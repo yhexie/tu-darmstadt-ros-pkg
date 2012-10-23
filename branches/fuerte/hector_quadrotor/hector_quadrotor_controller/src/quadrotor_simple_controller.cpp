@@ -261,7 +261,7 @@ void GazeboQuadrotorSimpleController::Update()
 
   // set force and torque in gazebo
   link->AddRelativeForce(force);
-  link->AddRelativeTorque(torque);
+  link->AddRelativeTorque(torque - link->GetInertial()->GetCoG().GetCrossProd(force));
 
   // save last time stamp
   last_time = sim_time;

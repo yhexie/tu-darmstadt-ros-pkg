@@ -63,8 +63,8 @@ private:
   /// \brief The parent World
   physics::WorldPtr world;
 
-  /// \brief The model referred to by this plugin
-  physics::ModelPtr model;
+  /// \brief The link referred to by this plugin
+  physics::LinkPtr link;
 
   ros::NodeHandle* node_handle_;
   ros::CallbackQueue callback_queue_;
