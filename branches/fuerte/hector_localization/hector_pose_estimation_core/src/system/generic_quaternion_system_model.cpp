@@ -109,12 +109,12 @@ ColumnVector GenericQuaternionSystemModel::ExpectedValueGet(double dt) const
     q1            = x_(QUATERNION_X);
     q2            = x_(QUATERNION_Y);
     q3            = x_(QUATERNION_Z);
-    double p_x        = x_(POSITION_X);
-    double p_y        = x_(POSITION_Y);
+    double p_x    = x_(POSITION_X);
+    double p_y    = x_(POSITION_Y);
     double p_z    = x_(POSITION_Z);
-    double v_x        = x_(VELOCITY_X);
-    double v_y        = x_(VELOCITY_Y);
-    double v_z        = x_(VELOCITY_Z);
+    double v_x    = x_(VELOCITY_X);
+    double v_y    = x_(VELOCITY_Y);
+    double v_z    = x_(VELOCITY_Z);
     //----------------------------------------------------------
 
     //--> Attitude
@@ -134,11 +134,11 @@ ColumnVector GenericQuaternionSystemModel::ExpectedValueGet(double dt) const
 
     //--> Velocity (without coriolis forces) and Position
     //----------------------------------------------------------
-    if (getStatusFlags() & (STATE_XY_POSITION | STATE_XY_VELOCITY)) {
+    if (getStatusFlags() & STATE_XY_VELOCITY) {
         x_pred_(VELOCITY_X)  = v_x + dt*((q0*q0+q1*q1-q2*q2-q3*q3)*abx + (2.0*q1*q2-2.0*q0*q3)    *aby + (2.0*q1*q3+2.0*q0*q2)    *abz);
         x_pred_(VELOCITY_Y)  = v_y + dt*((2.0*q1*q2+2.0*q0*q3)    *abx + (q0*q0-q1*q1+q2*q2-q3*q3)*aby + (2.0*q2*q3-2.0*q0*q1)    *abz);
     }
-    if (getStatusFlags() & (STATE_Z_POSITION  | STATE_Z_VELOCITY)) {
+    if (getStatusFlags() & STATE_Z_VELOCITY) {
         x_pred_(VELOCITY_Z)  = v_z + dt*((2.0*q1*q3-2.0*q0*q2)    *abx + (2.0*q2*q3+2.0*q0*q1)    *aby + (q0*q0-q1*q1-q2*q2+q3*q3)*abz + gravity_);
     }
 
@@ -254,7 +254,7 @@ Matrix GenericQuaternionSystemModel::dfGet(unsigned int i, double dt) const
     A_(QUATERNION_Z,BIAS_GYRO_Z)  = 0.5*dt*q0;
 #endif // USE_RATE_SYSTEM_MODEL
 
-  if (measurement_status_ & (STATE_XY_POSITION | STATE_XY_VELOCITY)) {
+  if (getStatusFlags() & STATE_XY_VELOCITY) {
     A_(VELOCITY_X,QUATERNION_W) = dt*(-2.0*q3*aby+2.0*q2*abz+2.0*q0*abx);
     A_(VELOCITY_X,QUATERNION_X) = dt*( 2.0*q2*aby+2.0*q3*abz+2.0*q1*abx);
     A_(VELOCITY_X,QUATERNION_Y) = dt*(-2.0*q2*abx+2.0*q1*aby+2.0*q0*abz);
@@ -289,7 +289,7 @@ Matrix GenericQuaternionSystemModel::dfGet(unsigned int i, double dt) const
     A_(VELOCITY_Y,BIAS_ACCEL_Z) = 0.0;
   }
 
-  if (getStatusFlags() & (STATE_Z_POSITION  | STATE_Z_VELOCITY)) {
+  if (getStatusFlags() & STATE_Z_VELOCITY) {
     A_(VELOCITY_Z,QUATERNION_W) = dt*(-2.0*q2*abx+2.0*q1*aby+2.0*q0*abz);
     A_(VELOCITY_Z,QUATERNION_X) = dt*( 2.0*q3*abx+2.0*q0*aby-2.0*q1*abz);
     A_(VELOCITY_Z,QUATERNION_Y) = dt*(-2.0*q0*abx+2.0*q3*aby-2.0*q2*abz);
