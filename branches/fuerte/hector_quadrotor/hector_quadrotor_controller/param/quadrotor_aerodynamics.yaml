@@ -1,4 +1,4 @@
-quadrotor_aerodynamics:
+quadrotor_propulsion:
         Psi: 6.7140e-003
         J_M: 5.2553e-5
         R_A: 2.2708e-001
@@ -10,6 +10,7 @@ quadrotor_aerodynamics:
         k_t: 3.1130e-002
         l_m: 0.275
 
+quadrotor_aerodynamics:
         C_wxy: 0.08
         C_wz: 0.08
         C_mxy: 0.074156208000000
