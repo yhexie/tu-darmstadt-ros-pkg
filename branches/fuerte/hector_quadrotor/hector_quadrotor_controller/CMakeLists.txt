@@ -22,8 +22,8 @@ set(MATLAB_MODEL_DIR "${CMAKE_SOURCE_DIR}/matlab/emcprj/rtwlib")
 include_directories(${MATLAB_MODEL_DIR})
 add_subdirectory(matlab)
 
-option(USE_PROPULSION_MODEL "Use a model of the quadrotor propulsion system" ON)
-option(USE_AERODYNAMICS_MODEL "Use a model of the quadrotor aerodynamics" ON)
+option(USE_PROPULSION_MODEL "Use a model of the quadrotor propulsion system" OFF)
+option(USE_AERODYNAMICS_MODEL "Use a model of the quadrotor aerodynamics" OFF)
 
 if(TARGET quadrotor_model)
   rosbuild_add_library(hector_gazebo_quadrotor_propulsion src/quadrotor_propulsion.cpp)
@@ -36,8 +36,8 @@ if(TARGET quadrotor_model)
 
 else()
   message(WARNING "Quadrotor model is not available. Skipping targets hector_gazebo_quadrotor_aerodynamics and hector_gazebo_quadrotor_propulsion...")
-  set(USE_PROPULSION_MODEL 0)
-  set(USE_AERODYNAMICS_MODEL 0)
+  set(USE_PROPULSION_MODEL OFF)
+  set(USE_AERODYNAMICS_MODEL OFF)
 endif()
 
 rosbuild_add_library(hector_gazebo_quadrotor_simple_controller src/quadrotor_simple_controller.cpp)
