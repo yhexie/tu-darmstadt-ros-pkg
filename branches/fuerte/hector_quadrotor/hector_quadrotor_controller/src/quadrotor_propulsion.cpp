@@ -56,7 +56,7 @@ struct GazeboQuadrotorPropulsion::PropulsionModel {
   boost::array<real_T,4>  x;
   boost::array<real_T,4>  x_pred;
   boost::array<real_T,10> u;
-  boost::array<real_T,6>  y;
+  boost::array<real_T,14> y;
 };
 
 GazeboQuadrotorPropulsion::GazeboQuadrotorPropulsion()
@@ -304,12 +304,18 @@ void GazeboQuadrotorPropulsion::Update()
   // publish motor status
   if (motor_status_publisher_ && current_time >= last_motor_status_time_ + control_period_) {
     motor_status_.header.stamp = ros::Time(current_time.sec, current_time.nsec);
-    motor_status_.running = propulsion_model_->x[0] > 1.0 && propulsion_model_->x[1] > 1.0 && propulsion_model_->x[2] > 1.0 && propulsion_model_->x[3] > 1.0;
     motor_status_.frequency.resize(4);
-    motor_status_.frequency[0] = propulsion_model_->x[0];
-    motor_status_.frequency[1] = propulsion_model_->x[1];
-    motor_status_.frequency[2] = propulsion_model_->x[2];
-    motor_status_.frequency[3] = propulsion_model_->x[3];
+    motor_status_.frequency[0] = propulsion_model_->y[6];
+    motor_status_.frequency[1] = propulsion_model_->y[7];
+    motor_status_.frequency[2] = propulsion_model_->y[8];
+    motor_status_.frequency[3] = propulsion_model_->y[9];
+    motor_status_.running = motor_status_.frequency[0] > 1.0 && motor_status_.frequency[1] > 1.0 && motor_status_.frequency[2] > 1.0 && motor_status_.frequency[3] > 1.0;
+
+    motor_status_.current.resize(4);
+    motor_status_.current[0] = propulsion_model_->y[10];
+    motor_status_.current[1] = propulsion_model_->y[11];
+    motor_status_.current[2] = propulsion_model_->y[12];
+    motor_status_.current[3] = propulsion_model_->y[13];
     motor_status_publisher_.publish(motor_status_);
     last_motor_status_time_ = current_time;
   }
