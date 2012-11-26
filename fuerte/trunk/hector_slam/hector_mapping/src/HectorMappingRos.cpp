@@ -270,7 +270,7 @@ void HectorMappingRos::scanCallback(const sensor_msgs::LaserScan& scan)
             tf_.waitForTransform(p_map_frame_,p_base_frame_, scan.header.stamp, ros::Duration(0.5));
             tf_.lookupTransform(p_map_frame_, p_base_frame_,  scan.header.stamp, stamped_pose);
 
-            btScalar yaw, pitch, roll;
+            tfScalar yaw, pitch, roll;
             stamped_pose.getBasis().getEulerYPR(yaw, pitch, roll);
 
             startEstimate = Eigen::Vector3f(stamped_pose.getOrigin().getX(),stamped_pose.getOrigin().getY(), yaw);
