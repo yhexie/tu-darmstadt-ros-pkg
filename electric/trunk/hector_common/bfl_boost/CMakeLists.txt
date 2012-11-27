@@ -44,7 +44,6 @@ else (USE_SVN)
   endif(_make_failed)
 endif (USE_SVN)
 
-set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}/install")
 set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(MATRIX_LIB boost)
