@@ -17,6 +17,11 @@ std::string g_child_frame_id;
 tf::TransformBroadcaster *g_transform_broadcaster;
 ros::Publisher g_pose_publisher;
 
+#ifndef TF_MATRIX3x3_H
+  typedef btScalar tfScalar;
+  namespace tf { typedef btMatrix3x3 Matrix3x3; }
+#endif
+
 void addTransform(std::vector<geometry_msgs::TransformStamped>& transforms, const tf::StampedTransform& tf)
 {
   transforms.resize(transforms.size()+1);
@@ -36,8 +41,8 @@ void sendTransform(geometry_msgs::Pose const &pose, const std_msgs::Header& head
 
   tf::Quaternion orientation;
   tf::quaternionMsgToTF(pose.orientation, orientation);
-  btScalar yaw, pitch, roll;
-  btMatrix3x3(orientation).getEulerYPR(yaw, pitch, roll);
+  tfScalar yaw, pitch, roll;
+  tf::Matrix3x3(orientation).getEulerYPR(yaw, pitch, roll);
   tf::Point position;
   tf::pointMsgToTF(pose.position, position);
 
@@ -66,7 +71,7 @@ void sendTransform(geometry_msgs::Pose const &pose, const std_msgs::Header& head
   if (!g_footprint_frame_id.empty() && child_frame_id != g_stabilized_frame_id) {
     tf.child_frame_id_ = g_stabilized_frame_id;
     tf.setOrigin(tf::Vector3(0.0, 0.0, position.z()));
-    tf.setBasis(btMatrix3x3::getIdentity());
+    tf.setBasis(tf::Matrix3x3::getIdentity());
     addTransform(transforms, tf);
 
     position.setZ(0.0);
@@ -110,8 +115,8 @@ void imuCallback(sensor_msgs::Imu const &imu) {
 
   tf::Quaternion orientation;
   tf::quaternionMsgToTF(imu.orientation, orientation);
-  btScalar yaw, pitch, roll;
-  btMatrix3x3(orientation).getEulerYPR(yaw, pitch, roll);
+  tfScalar yaw, pitch, roll;
+  tf::Matrix3x3(orientation).getEulerYPR(yaw, pitch, roll);
 
   // base_link transform (roll, pitch)
   tf.child_frame_id_ = child_frame_id;
