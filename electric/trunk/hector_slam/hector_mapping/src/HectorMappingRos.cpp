@@ -40,9 +40,7 @@
 #include "HectorMapMutex.h"
 
 #ifndef TF_SCALAR_H
-namespace tf {
-  typedef btScalar Scalar;
-}
+  typedef btScalar tfScalar;
 #endif
 
 HectorMappingRos::HectorMappingRos()
