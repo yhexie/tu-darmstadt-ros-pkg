@@ -17,6 +17,11 @@ std::string g_child_frame_id;
 tf::TransformBroadcaster *g_transform_broadcaster;
 ros::Publisher g_pose_publisher;
 
+#ifndef TF_MATRIX3x3_H
+  typedef btScalar tfScalar;
+  namespace tf { typedef btMatrix3x3 Matrix3x3; }
+#endif
+
 void addTransform(std::vector<geometry_msgs::TransformStamped>& transforms, const tf::StampedTransform& tf)
 {
   transforms.resize(transforms.size()+1);
@@ -110,7 +115,7 @@ void imuCallback(sensor_msgs::Imu const &imu) {
 
   tf::Quaternion orientation;
   tf::quaternionMsgToTF(imu.orientation, orientation);
-  double yaw, pitch, roll;
+  tfScalar yaw, pitch, roll;
   tf::Matrix3x3(orientation).getEulerYPR(yaw, pitch, roll);
 
   // base_link transform (roll, pitch)
