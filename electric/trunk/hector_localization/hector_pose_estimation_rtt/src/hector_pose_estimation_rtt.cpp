@@ -41,14 +41,14 @@ namespace hector_pose_estimation {
 
 PoseEstimationTaskContext::PoseEstimationTaskContext(const std::string& name, SystemModel *system_model)
   : RTT::TaskContext(name, RTT::TaskContext::PreOperational)
-  , PoseEstimation(system_model)
+  , PoseEstimation(system_model ? system_model : new GenericQuaternionSystemModel)
 {
   this->addEventPort("raw_imu", imu_input_);
   this->addPort("poseupdate", pose_update_input_);
   this->addPort("magnetic", magnetic_input_);
-  this->addPort("height", height_input_);
-  this->addPort("gps", gps_input_);
-  this->addPort("gps_velocity", gps_velocity_input_);
+  this->addPort("pressure_height", height_input_);
+  this->addPort("fix", gps_input_);
+  this->addPort("fix_velocity", gps_velocity_input_);
   this->addPort("state", state_output_);
   this->addPort("imu", imu_output_);
   this->addPort("pose", pose_output_);
@@ -162,9 +162,8 @@ void PoseEstimationTaskContext::updateHook()
     input(GYRO_Z)  = imu_in_.angular_velocity.z;
 
     PoseEstimation::update(input, imu_in_.header.stamp);
+    updateOutputs();
   }
-
-  updateOutputs();
 }
 
 void PoseEstimationTaskContext::updateOutputs()
