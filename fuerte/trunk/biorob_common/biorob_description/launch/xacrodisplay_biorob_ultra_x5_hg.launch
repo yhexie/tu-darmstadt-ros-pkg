@@ -2,6 +2,6 @@
 
 <launch>
       <include file="$(find biorob_description)/launch/xacrodisplay_common.launch">
-        <arg name="robot_model" value="biorob_ultra_x5/biorob_ultra_x5.urdf.xacro"/>
+        <arg name="robot_model" value="biorob_ultra_x5_hg/biorob_ultra_x5_hg.urdf.xacro"/>
       </include>
 </launch>
