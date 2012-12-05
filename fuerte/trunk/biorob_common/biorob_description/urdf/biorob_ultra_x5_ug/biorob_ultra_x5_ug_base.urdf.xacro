@@ -3,16 +3,16 @@
        xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
        xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
        xmlns:xacro="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
-       name="biorob_ultra_x6">
+       name="biorob_ultra_x5_ug">
        
   <xacro:property name="base_height" value=".01"/>
   <xacro:property name="j1_length" value=".284"/>
   <!--0.285 to base plate-->
   <xacro:property name="j2_length" value=".305"/>
-  <xacro:property name="j3_length" value=".10"/>
+  <xacro:property name="j3_length" value=".100"/>
   <xacro:property name="j4_length" value=".205"/>
-  <xacro:property name="j5_length" value=".14"/>
-  <xacro:property name="j6_length" value=".08"/>
+  <xacro:property name="j5_length" value=".150"/>
+  <!--<xacro:property name="j6_length" value=".08"/>-->
   <xacro:property name="pi" value="3.1415926536"/>
   
   <xacro:macro name="default_inertial" params="mass">
@@ -23,7 +23,7 @@
     </inertial>
   </xacro:macro>
   
-  <macro name="biorob_ultra_x6_arm" params="parent *origin">
+  <macro name="biorob_ultra_x5_ug_arm" params="parent *origin">
     <link name="biorob_base_link">
       <visual>
         <geometry>
@@ -129,7 +129,7 @@
       <visual>
         <geometry>
           <mesh filename="package://biorob_description/meshes/biorob_x6/biorob_v3_x6_link_4.dae"/>
-          <!--                    <cylinder radius="0.002" length="0.001" />-->
+          <!--<cylinder radius="0.02" length="${j4_length}" />-->
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <material name="red">
@@ -154,7 +154,7 @@
       <visual>
         <geometry>
           <mesh filename="package://biorob_description/meshes/biorob_common/biorob_link_4.dae"/>
-          <!--  <cylinder radius="0.02" length="${j4_length}" />-->
+          <!--<cylinder radius="0.002" length="0.001" />-->
         </geometry>
         <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
         <material name="red">
@@ -164,7 +164,7 @@
       <collision>
         <geometry>
           <mesh filename="package://biorob_description/meshes/biorob_common/biorob_link_4.dae"/>
-          <!--<cylinder radius="0.02" length="${j4_length}" />-->
+          <!--<cylinder radius="0.002" length="0.001" />-->
         </geometry>
         <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
       </collision>
@@ -175,37 +175,12 @@
       <material>biorob_material/Grey</material>
       <!--<material>HLUGV/Green</material>-->
     </gazebo>
-    <link name="biorob_link6">
-      <visual>
-        <geometry>
-          <mesh filename="package://biorob_description/meshes/biorob_ultra/biorob_ultra_tcp_end_80.dae"/>
-          <!--<cylinder radius="0.002" length="0.001" />-->
-        </geometry>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <material name="red">
-                  
-                </material>
-      </visual>
-      <collision>
-        <geometry>
-          <mesh filename="package://biorob_description/meshes/biorob_ultra/biorob_ultra_tcp_end_80.dae"/>
-          <!--<cylinder radius="0.002" length="0.001" />-->
-        </geometry>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-      </collision>
-      <xacro:default_inertial mass="0.01"/>
-    </link>
-    <gazebo reference="biorob_link6">
-      <selfCollide>true</selfCollide>
-      <material>biorob_material/Grey</material>
-      <!--<material>HLUGV/Green</material>-->
-    </gazebo>
     <link name="biorob_toolframe">
       <visual>
         <geometry>
           <cylinder radius="0.01" length="0.001" />
         </geometry>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
         <material name="red">                  
         </material>
       </visual>
@@ -213,7 +188,7 @@
         <geometry>
           <cylinder radius="0.02" length="0.001" />
         </geometry>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
       </collision>
       <xacro:default_inertial mass="0.05"/>
     </link>
@@ -243,7 +218,7 @@
     <joint name="joint3" type="revolute">
       <parent link="biorob_link2"/>
       <child link="biorob_link3"/>
-      <axis xyz="0 0 1 "/>
+      <axis xyz="0 0 1"/>
       <origin xyz="0 ${j2_length} 0" rpy="0 0 ${pi/2}"/>
       <limit effort="6.0" lower="${-pi*(100/180)}" upper="${pi*(100/180)}" velocity="1.5708"/>
       <dynamics damping="1.0" friction="1.0"/>
@@ -252,7 +227,7 @@
       <parent link="biorob_link3"/>
       <child link="biorob_link4"/>
       <axis xyz="0 0 1"/>
-      <origin xyz="${j3_length} 0 0.0" rpy="${pi/2} 0 ${pi/2}"/>
+      <origin xyz="${j3_length} 0 0" rpy="${pi/2} 0 ${pi/2}"/>
       <limit effort="6.0" lower="${-pi*(100/180)}" upper="${pi*(100/180)}" velocity="1.5708"/>
       <!-- TODO: give correct effort limits -->
       <dynamics damping="1.0" friction="1.0"/>
@@ -266,20 +241,11 @@
       <!-- TODO: give correct effort limits -->
       <dynamics damping="1.0" friction="1.0"/>
     </joint>
-    <joint name="joint6" type="revolute">
-      <parent link="biorob_link5"/>
-      <child link="biorob_link6"/>
-      <axis xyz="0 0 1"/>
-      <origin xyz="0 ${-j5_length} 0 " rpy="${pi/2} 0 0"/>
-      <limit effort="6.0" lower="${-pi*(100/180)}" upper="${pi*(100/180)}" velocity="1.5708"/>
-      <!-- TODO: give correct effort limits -->
-      <dynamics damping="1.0" friction="1.0"/>
-    </joint>
     <joint name="tool_frame" type="fixed">
-      <parent link="biorob_link6"/>
+      <parent link="biorob_link5"/>
       <child link="biorob_toolframe"/>
       <axis xyz="0 0 1"/>
-      <origin xyz="0 0 ${j6_length}" rpy="0 0 0"/>
+      <origin xyz="0 ${-j5_length} 0" rpy="0 0 ${-pi/2}"/>
     </joint>
     
     <transmission type="pr2_mechanism_model/SimpleTransmission" name="joint1_trans">

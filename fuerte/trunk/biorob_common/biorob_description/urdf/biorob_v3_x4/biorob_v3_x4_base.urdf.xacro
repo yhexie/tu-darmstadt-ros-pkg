@@ -79,7 +79,7 @@ name="biorob_v3_x4">
           <!--<mesh filename="package://katana_description/meshes/katana/katana_internal_controlbox.stl" />-->
         </geometry>
         <!--<origin xyz="${j2_length/2 - j2_overhang_rear/2 } 0 0" rpy="0 ${pi/2} 0"/>-->
-        <origin xyz="0 0 0" rpy="${-pi/2} ${pi/2} 0"/>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} ${pi}"/>
         <material name="red">
           <color rgba="0.6 0.6 0.6 1"/>
         </material>
@@ -89,7 +89,7 @@ name="biorob_v3_x4">
           <mesh filename="package://biorob_description/meshes/biorob_common/biorob_link_2.dae"/>
           <!--<cylinder radius="0.02" length="${j2_length}" />-->
         </geometry>
-        <origin xyz="0 0 0" rpy="${-pi/2} ${pi/2} 0"/>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} ${pi}"/>
       </collision>
       <xacro:default_inertial mass="0.5"/>
     </link>
@@ -149,6 +149,20 @@ name="biorob_v3_x4">
       <!--<material>HLUGV/Green</material>-->
     </gazebo>
     <link name="biorob_toolframe">
+      <visual>
+        <geometry>
+          <cylinder radius="0.01" length="0.001" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+        <material name="red">                  
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder radius="0.02" length="0.001" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+      </collision>
       <xacro:default_inertial mass="0.05"/>
     </link>
     
@@ -170,7 +184,7 @@ name="biorob_v3_x4">
       <parent link="biorob_link1"/>
       <child link="biorob_link2"/>
       <axis xyz="0 0 1"/>
-      <origin xyz="0 0 ${j1_length-base_height}" rpy="${pi/2} -${pi/2} 0"/>
+      <origin xyz="0 0 ${j1_length-base_height}" rpy="${pi/2} 0 0"/>
       <limit effort="6.0" lower="${-pi*(170/180)}" upper="${pi*(170/180)}" velocity="1.5708"/>
       <dynamics damping="1.0" friction="1.0"/>
     </joint>
@@ -178,7 +192,7 @@ name="biorob_v3_x4">
       <parent link="biorob_link2"/>
       <child link="biorob_link3"/>
       <axis xyz="0 0 1 "/>
-      <origin xyz="${j2_length} 0 0.0"/>
+      <origin xyz="0 ${j2_length} 0" rpy="0 0 ${pi/2}"/>
       <limit effort="6.0" lower="${-pi*(100/180)}" upper="${pi*(100/180)}" velocity="1.5708"/>
       <dynamics damping="1.0" friction="1.0"/>
     </joint>
@@ -195,7 +209,7 @@ name="biorob_v3_x4">
       <parent link="biorob_link4"/>
       <child link="biorob_toolframe"/>
       <axis xyz="0 0 1"/>
-      <origin xyz="${j4_length} 0.0 0.0" rpy="${-pi/2} 0 0"/>
+      <origin xyz="${j4_length} 0.0 0.0" rpy="0 0 0"/>
     </joint>
     
     <transmission type="pr2_mechanism_model/SimpleTransmission" name="joint1_trans">
