@@ -33,7 +33,7 @@
         
         <link name="${prefix}_wheel_link">
             <inertial>
-                <mass value="0.1" />
+                <mass value="0.2" />
                 <origin xyz=" 0 0 0 " />
                 <inertia  ixx="0.00012411765597" ixy="0.0" ixz="0.0"
                           iyy="0.00015218160428" iyz="0.0"
@@ -64,7 +64,7 @@
             <mu2 value="100.0" />
             <kp  value="100000.0" />
             <kd  value="1.0" />
-            <material>HLUGV/Grey</material>
+	    <material>Gazebo/Grey</material>
         </gazebo>
         
         
