@@ -17,6 +17,7 @@
   <depend package="hector_geotiff"/>
   <depend package="object_tracker"/>
   <depend package="worldmodel_geotiff_plugins"/>
+  <depend package="hlugv_gazebo"/>
   
 </package>
 
